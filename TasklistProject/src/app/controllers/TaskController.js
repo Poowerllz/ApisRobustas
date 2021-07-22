@@ -5,7 +5,7 @@ class TaskController {
 
   async index(req, res) {
     const tasks = await Task.findAll({
-      where: {user_id: req.userId, check:false,}
+      where: { user_id: req.userId, check: false, }
     })
 
     return res.json(tasks)
@@ -29,6 +29,39 @@ class TaskController {
     })
 
     return res.status(401).json({ Status: "Ok! tarefa criada." })
+  }
+
+  async update(req, res) {
+    const { task_id } = req.params;
+
+    const task = await Task.findByPk(task_id);
+
+    if (!task) {
+      res.status(400).json({ error: "Tarefa não existe." })
+    }
+
+    await task.update(req.body);
+    return res.json(task);
+  }
+
+  async delete(req, res){
+    const { task_id } = req.params;
+
+    const task = await Task.findByPk(task_id);
+
+    if (!task) {
+      res.status(400).json({ error: "Tarefa não existe." })
+    }
+
+    const { task_id } = await Task.findByPk(res.params);
+
+    if(task.user_id !== req.userId){
+      res.status(401).json({ error: "Você não é o dono desta task." })
+    }
+
+    await task.destroy();
+
+    return res.send();
   }
 }
 

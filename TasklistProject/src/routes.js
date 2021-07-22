@@ -19,8 +19,7 @@ routes.put('/users' ,UserController.update);
 
  routes.post('/tasks', TaskController.store);
  routes.get('/tasks', TaskController.index);
-
-
-
+ routes.get('/tasks/:task_id', TaskController.update);
+ routes.delete('/tasks/:task_id', TaskController.delete);
 
 export default routes;
